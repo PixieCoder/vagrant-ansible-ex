@@ -1,0 +1,12 @@
+---
+- hosts: all
+  gather_facts: yes
+  tasks:
+    - name: update apt cache
+      apt: update_cache=yes
+    - name: Install apache
+      apt: name=apache2 state=present
+    - name: Install mysql
+      apt: name=mysql-server state=present
+    - name: Install php
+      apt: name=php5 state=present

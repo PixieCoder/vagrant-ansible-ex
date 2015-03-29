@@ -1,0 +1,9 @@
+mysql_root_pass: test123
+document_root: /vagrant/repo/drupal
+drupal_repo: http://git.drupal.org/project/drupal.git
+drupal_branch: 8.0.x
+drupal_salt: YJ:|Wj>0!Meb+v3O-?n:%W%LrnJ>|v38NiNW$MvdNBL5,/Z}]d_*Cj:9?{X%*W8|
+mysql_user: d8_user
+mysql_user_pass: 321tset
+mysql_db: d8_db
+log_root: /vagrant/log

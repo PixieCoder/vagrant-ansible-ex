@@ -1,0 +1,35 @@
+---
+- name: Clone Drupal repo
+  git:
+    dest: "{{ document_root }}"
+    repo: "{{ drupal_repo }}"
+    version: "{{ drupal_branch }}"
+#    clone: true
+    update: true # Change to false after initial import
+- name: Install deps
+  apt: name=php5-gd state=present 
+- name: Drupal settings files
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ document_root }}/sites/default/{{ item }}"
+  with_items:
+    - services.yml
+- name: Drupal files folder
+  sudo: true
+  file:
+    path: "{{ document_root }}/sites/default/files"
+    state: directory
+    recurse: true
+- name: Drupal database
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_pass }}"
+    name: "{{ mysql_db }}"
+    # We could set an import here
+- name: Drupal mysql user
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_pass }}"
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_user_pass }}"
+    priv: "{{ mysql_db }}.*:ALL,GRANT"

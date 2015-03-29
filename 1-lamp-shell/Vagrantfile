@@ -1,0 +1,31 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "cargomedia/debian-7-amd64-plain"
+
+	config.vm.provider "virtualbox" do |v|
+		v.name = "lamp1" # Change the name here to something unique!
+		v.memory = 512
+		v.cpus = 2
+	end
+
+	config.vm.hostname = "lamp1"
+  config.vm.network "private_network", ip: "192.168.33.14"
+  config.vm.network "forwarded_port", guest: 80, host: 8081 # This means you will see the client's apache on localhost:8081 in your browser
+
+	# Set the name of the VM
+	config.vm.define :lamp1 do |lamp1|
+	end
+
+	config.vm.provision "shell" do |s|
+		s.inline = <<'EOS'
+export DEBIAN_FRONTEND=noninteractive # Removes prompts during install
+apt-get update
+apt-get install -y -f apache2 php5 mysql-server
+rm -rf /var/www
+ln -s /vagrant/www /var/www
+EOS
+	end
+
+end

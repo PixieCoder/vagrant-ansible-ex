@@ -1,0 +1,5 @@
+---
+- name: install php
+  sudo: true
+  apt: name=php5 state=present
+

@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: yes
+  vars_files:
+    - config.yml
+  pre_tasks:
+    - name: Update apt cache
+      apt: update_cache=yes
+  roles:
+    - web
+    - db
+    - vcs
+    - drupal

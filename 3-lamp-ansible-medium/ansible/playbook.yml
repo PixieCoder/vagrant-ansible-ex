@@ -1,0 +1,16 @@
+---
+- hosts: all
+  gather_facts: yes
+  sudo: true
+  vars:
+    document_root: /vagrant/repo
+    log_root: /vagrant/log
+  handlers:
+    - name: Reload apache
+      service: name=apache2 state=reloaded
+  tasks:
+    - name: update apt cache
+      apt: update_cache=yes
+    - include: tasks/apache.yml
+    - include: tasks/mysql.yml
+    - include: tasks/php.yml

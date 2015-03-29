@@ -1,0 +1,38 @@
+---
+- name: Install apache
+  sudo: true
+  apt: name=apache2 state=present
+- name: New vhost config
+  sudo: true
+  template: 
+    src=vhost.conf.j2
+    dest=/etc/apache2/sites-available/vhost.conf
+  notify:
+    - Reload apache
+- name: Remove default vhost file
+  sudo: true
+  file:
+    path=/etc/apache2/sites-enabled/000-default
+    state=absent
+  notify:
+    - Reload apache
+- name: Enable new vhost
+  sudo: true
+  file:
+    src=/etc/apache2/sites-available/vhost.conf
+    dest=/etc/apache2/sites-enabled/000-vhost.conf
+    state=link
+  notify:
+    - Reload apache
+- name: Create fqdn
+  copy:
+    dest=/etc/apache2/conf.d/fqdn
+    content="ServerName localhost"
+  notify:
+    - Reload apache
+- name: Ensure running
+  sudo: true
+  service: 
+    name=apache2
+    state=started
+    enabled=yes
